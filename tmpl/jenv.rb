@@ -1,6 +1,6 @@
 require 'formula'
 
-class jenv < Formula
+class Jenv < Formula
   homepage ''
   url 'https://github.com/johnlayton/lumleahcourt/raw/master/dist/jenv-<%= version %>.tar.gz'
   sha1 '<%= shasum %>'
