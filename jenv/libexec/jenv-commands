@@ -24,16 +24,13 @@ shopt -s nullglob
 
 { for path in ${PATH//:/$'\n'}; do
     for command in "${path}/jenv-"*; do
-
-      echo $command
-
       command="${command##*jenv-}"
       if [ -n "$sh" ]; then
-        if [ ${command:0:2} = "sh-" ]; then
+        if [ ${command:0:3} = "sh-" ]; then
           echo ${command##sh-}
         fi
       elif [ -n "$nosh" ]; then
-        if [ ${command:0:2} != "sh-" ]; then
+        if [ ${command:0:3} != "sh-" ]; then
           echo ${command##sh-}
         fi
       else
