@@ -1,6 +1,6 @@
 {
   "name"            : "lumleahcourt",
-  "version"         : "0.0.2",
+  "version"         : "0.0.3",
   "description"     : "RBEnv for Java",
   "main"            : "index.js",
   "dependencies"    : {

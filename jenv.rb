@@ -2,8 +2,8 @@ require 'formula'
 
 class Jenv < Formula
   homepage ''
-  url 'https://github.com/johnlayton/lumleahcourt/raw/master/dist/jenv-0.0.2.tar.gz'
-  sha1 '387b8b6faa4c12b5fdb52bdc386081fd51be2b73'
+  url 'https://github.com/johnlayton/lumleahcourt/raw/master/dist/jenv-0.0.3.tar.gz'
+  sha1 'b6ecbc8f82fb0261274d995a5f9cb381a88ec22c'
 
   def install
     inreplace 'libexec/jenv', '/usr/local', HOMEBREW_PREFIX
