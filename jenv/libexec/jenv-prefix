@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Summary: Display prefix for a Java version
+# Usage: jenv prefix [<version>]
+#
+# Displays the directory where a Java version is installed. If no
+# version is given, `jenv prefix' displays the location of the
+# currently selected version.
+
+set -e
+[ -n "$JENV_DEBUG" ] && set -x
+
+# Provide jenv completions
+if [ "$1" = "--complete" ]; then
+  echo system
+  exec jenv-versions --bare
+fi
+
+if [ -n "$1" ]; then
+  export JENV_VERSION="$1"
+elif [ -z "$JENV_VERSION" ]; then
+  JENV_VERSION="$(jenv-version-name)"
+fi
+
+#if [ "$JENV_VERSION" = "system" ]; then
+#  JAVA_PATH="$(jenv-which java)"
+#  JAVA_PATH="${JAVA_PATH%/*}"
+#  echo "${JAVA_PATH%/bin}"
+#  exit
+#fi
+
+#JENV_PREFIX_PATH="${JENV_ROOT}/versions/${JENV_VERSION}"
+#if [ ! -d "$JENV_PREFIX_PATH" ]; then
+#  echo "jenv: version \`${JENV_VERSION}' not installed" >&2
+#  exit 1
+#fi
+
+if [ "$JENV_VERSION" = "system" ]; then
+#  PATH="$(remove_from_path "${JENV_ROOT}/shims")"
+#  JENV_COMMAND_PATH="$(command -v "$JENV_COMMAND" || true)"
+  JENV_PREFIX_PATH="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin"
+else
+  IFS=- read PROVIDER NUMBER <<< "$JENV_VERSION"
+  if [ -d "${JENV_ROOT}/versions/${JENV_VERSION}" ]; then
+    JENV_PREFIX_PATH="${JENV_ROOT}/versions/${JENV_VERSION}/bin"
+  elif [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ]; then
+    JENV_PREFIX_PATH="${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}/bin"
+  elif [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]; then
+    JENV_PREFIX_PATH="$(/usr/libexec/java_home -v ${NUMBER})/bin"
+  elif [ -d "${JENV_ROOT}/versions/${NUMBER}" ]; then
+    JENV_PREFIX_PATH="${JENV_ROOT}/versions/${NUMBER}/bin"
+  fi
+fi
+
+echo "$JENV_PREFIX_PATH"

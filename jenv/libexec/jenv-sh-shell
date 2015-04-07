@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 #
-# Summary: Set or show the shell-specific Node version
+# Summary: Set or show the shell-specific Java version
 #
 # Usage: jenv shell <version>
 #        jenv shell --unset
 #
-# Sets a shell-specific Node version by setting the `JENV_VERSION'
+# Sets a shell-specific Java version by setting the `JENV_VERSION'
 # environment variable in your shell. This version overrides local
 # application-specific versions and the global version.
 #
-# <version> should be a string matching a Node version known to jenv.
-# The special version string `system' will use your default system Node.
-# Run `jenv versions' for a list of available Node versions.
+# <version> should be a string matching a Java version known to jenv.
+# The special version string `system' will use your default system Java.
+# Run `jenv versions' for a list of available Java versions.
 
 set -e
 [ -n "$JENV_DEBUG" ] && set -x

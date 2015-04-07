@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Summary: Show the current Java version
+
+set -e
+[ -n "$JENV_DEBUG" ] && set -x
+
+if [ -z "$JENV_VERSION" ]; then
+  JENV_VERSION_FILE="$(jenv-version-file)"
+  JENV_VERSION="$(jenv-version-file-read "$JENV_VERSION_FILE" || true)"
+fi
+
+if [ -z "$JENV_VERSION" ] || [ "$JENV_VERSION" = "system" ]; then
+  echo "system"
+  exit
+fi
+
+version_exists() {
+  local VERSION="$1"
+  IFS=- read PROVIDER NUMBER <<< "$VERSION"
+  [ -d "${JENV_ROOT}/versions/$VERSION" ] || [ -d "${JENV_ROOT}/versions/${NUMBER}" ] || [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ] || [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]
+}
+
+if version_exists "$JENV_VERSION"; then
+  echo "$JENV_VERSION"
+else
+  echo "jenv: version \`$JENV_VERSION' is not installed" >&2
+  exit 1
+fi
+
+##########################
+#elif version_exists "${JENV_VERSION#oracle-}"; then
+#  { echo "warning: ignoring extraneous \`oracle-' prefix in version \`${JENV_VERSION}'"
+#    echo "         (set by $(jsenv-version-origin))"
+#  } >&2
+#  echo "${JENV_VERSION#oracle-}"
+##########################
