@@ -6,18 +6,18 @@ set -e
 
 
 JENV_VERSION="$(jenv-version-name)"
-JENV_PROVIDER=""
+JENV_NUMBER=""
 
 IFS=- read PROVIDER NUMBER <<< "$JENV_VERSION"
 
 if [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ]; then
- JENV_PROVIDER="${PROVIDER}"
+ JENV_NUMBER="${NUMBER}"
 elif [ -d "${JENV_ROOT}/versions/${JENV_VERSION}" ]; then
- JENV_PROVIDER=""
+ JENV_NUMBER="${NUMBER}"
 elif [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]; then
- JENV_PROVIDER="${PROVIDER}"
+ JENV_NUMBER="${NUMBER}"
 elif [ -d "${JENV_ROOT}/versions/${NUMBER}" ]; then
- JENV_PROVIDER=""
+ JENV_NUMBER="${NUMBER}"
 fi
 
-echo "$JENV_PROVIDER"
+echo "$JENV_NUMBER"

@@ -21,33 +21,22 @@ elif [ -z "$JENV_VERSION" ]; then
   JENV_VERSION="$(jenv-version-name)"
 fi
 
-#if [ "$JENV_VERSION" = "system" ]; then
-#  JAVA_PATH="$(jenv-which java)"
-#  JAVA_PATH="${JAVA_PATH%/*}"
-#  echo "${JAVA_PATH%/bin}"
-#  exit
-#fi
-
-#JENV_PREFIX_PATH="${JENV_ROOT}/versions/${JENV_VERSION}"
-#if [ ! -d "$JENV_PREFIX_PATH" ]; then
-#  echo "jenv: version \`${JENV_VERSION}' not installed" >&2
-#  exit 1
-#fi
-
 if [ "$JENV_VERSION" = "system" ]; then
 #  PATH="$(remove_from_path "${JENV_ROOT}/shims")"
 #  JENV_COMMAND_PATH="$(command -v "$JENV_COMMAND" || true)"
   JENV_PREFIX_PATH="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin"
 else
   IFS=- read PROVIDER NUMBER <<< "$JENV_VERSION"
-  if [ -d "${JENV_ROOT}/versions/${JENV_VERSION}" ]; then
-    JENV_PREFIX_PATH="${JENV_ROOT}/versions/${JENV_VERSION}/bin"
-  elif [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ]; then
-    JENV_PREFIX_PATH="${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}/bin"
+  if [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ]; then
+    export JENV_PREFIX_PATH="${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}/bin"
+  elif [ -d "$(/usr/libexec/java_home -v ${JENV_VERSION})" ]; then
+    export JENV_PREFIX_PATH="$(/usr/libexec/java_home -v ${JENV_VERSION})/bin"
   elif [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]; then
-    JENV_PREFIX_PATH="$(/usr/libexec/java_home -v ${NUMBER})/bin"
+    export JENV_PREFIX_PATH="$(/usr/libexec/java_home -v ${NUMBER})/bin"
+  elif [ -d "${JENV_ROOT}/versions/$JENV_VERSION}" ]; then
+    export JENV_PREFIX_PATH="${JENV_ROOT}/versions/${JENV_VERSION}/bin"
   elif [ -d "${JENV_ROOT}/versions/${NUMBER}" ]; then
-    JENV_PREFIX_PATH="${JENV_ROOT}/versions/${NUMBER}/bin"
+    export JENV_PREFIX_PATH="${JENV_ROOT}/versions/${NUMBER}/bin"
   fi
 fi
 

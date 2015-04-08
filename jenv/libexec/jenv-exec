@@ -45,14 +45,16 @@ if [ "$JENV_VERSION" = "system" ]; then
   export JAVA_HOME="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"
 else
   IFS=- read PROVIDER NUMBER <<< "$JENV_VERSION"
-  if [ -d "${JENV_ROOT}/versions/$JENV_VERSION}" ]; then
-    export JAVA_HOME="${JENV_ROOT}/versions/${JENV_VERSION}"
-  elif [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ]; then
+  if [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ]; then
     export JAVA_HOME="${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}"
-  elif [ -d "${JENV_ROOT}/versions/${NUMBER}" ]; then
-    export JAVA_HOME="${JENV_ROOT}/versions/${NUMBER}"
+  elif [ -d "$(/usr/libexec/java_home -v ${JENV_VERSION})" ]; then
+    export JAVA_HOME="$(/usr/libexec/java_home -v ${JENV_VERSION})"
   elif [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]; then
     export JAVA_HOME="$(/usr/libexec/java_home -v ${NUMBER})"
+  elif [ -d "${JENV_ROOT}/versions/$JENV_VERSION}" ]; then
+    export JAVA_HOME="${JENV_ROOT}/versions/${JENV_VERSION}"
+  elif [ -d "${JENV_ROOT}/versions/${NUMBER}" ]; then
+    export JAVA_HOME="${JENV_ROOT}/versions/${NUMBER}"
   fi
 fi
 

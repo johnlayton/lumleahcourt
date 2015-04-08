@@ -17,7 +17,11 @@ fi
 version_exists() {
   local VERSION="$1"
   IFS=- read PROVIDER NUMBER <<< "$VERSION"
-  [ -d "${JENV_ROOT}/versions/$VERSION" ] || [ -d "${JENV_ROOT}/versions/${NUMBER}" ] || [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ] || [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]
+  [ -d "${JENV_ROOT}/versions/$VERSION" ] || \
+  [ -d "${JENV_ROOT}/versions/${NUMBER}" ] || \
+  [ -d "${JENV_ROOT}/versions/${PROVIDER}-${NUMBER}" ] || \
+  [ -d "$(/usr/libexec/java_home -v ${VERSION})" ] || \
+  [ -d "$(/usr/libexec/java_home -v ${NUMBER})" ]
 }
 
 if version_exists "$JENV_VERSION"; then
